@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.views.decorators.http import require_http_methods
 from rest_framework import permissions, viewsets
 
 from api.serializers import TodoListSerializer, TodoSerializer, UserSerializer
@@ -56,3 +57,19 @@ class TodoViewSet(viewsets.ModelViewSet):
         user = self.request.user
         creator = user if user.is_authenticated else None
         serializer.save(creator=creator)
+
+@require_http_methods(["GET"])
+def health(request):
+    now = timezone.now()
+    return HttpResponse(f"OK - {now.isoformat()}", status=200)
+
+time_started = time.time()
+delay_seconds = 30
+
+@require_http_methods(["GET"])
+def ready(request):
+    # Simulate a readiness check by sleeping for a short time
+    if time.time() - time_started < delay_seconds:
+        return HttpResponse("NOT READY", status=503)
+    else:
+        return HttpResponse("READY", status=200)
