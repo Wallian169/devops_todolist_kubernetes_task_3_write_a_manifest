@@ -6,6 +6,5 @@ metadata:
 spec:
     containers:
     - name: busybox
-      # I use this because provided image (ikulyk404/busyboxplus:curl) is built for arm64 architecture
-      image: curlimages/curl
+      image: ikulyk404/busyboxplus:curl
       command: ["sh", "-c", "sleep 3600"]
